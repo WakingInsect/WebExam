@@ -1,2 +1,5 @@
-Main-Class: Main
-Class-path: bin
+Manifest-Version: 1.0
+Main-Class: com.example.demo.Main
+Created-By: 15.0.1 (BellSoft)
+Class-Path: libs
+

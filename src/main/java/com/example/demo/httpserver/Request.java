@@ -1,4 +1,4 @@
-package com.example.demo.HttpServer;
+package com.example.demo.httpserver;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +11,9 @@ public class Request {
         this.input = input;
     }
 
+    /**
+     * 对请求进行解析
+     */
     public void parse() {
         StringBuffer request = new StringBuffer(2048);
         int i;
@@ -24,11 +27,17 @@ public class Request {
         for (int j = 0; j < i; ++j) {
             request.append((char) buffer[j]);
         }
-        // System.out.println(request.toString());
         uri = parseUri(request.toString());
     }
     
+    /**
+     * 对地址进行解析
+     * @param requestString request字符串
+     * @return
+     */
     public String parseUri(String requestString) {
+        System.out.println(requestString);
+        // 获取访问的文件名
         int index1, index2;
         index1 = requestString.indexOf(" ");
         if (index1 != -1) {
