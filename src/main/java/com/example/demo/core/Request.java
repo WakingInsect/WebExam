@@ -1,11 +1,13 @@
-package com.example.demo.httpserver;
+package com.example.demo.core;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public class Request {
     private InputStream input;
-    private String uri;
+    private String method;  // request 的方法
+    private String uri;     // 请求的资源地址
+    private String version; // http版本号
 
     public Request(InputStream input) {
         this.input = input;

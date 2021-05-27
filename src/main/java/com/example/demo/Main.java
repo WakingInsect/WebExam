@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.example.demo.httpserver.HttpServer;
+import com.example.demo.core.HttpServer;
 
 
 /**
@@ -13,9 +13,7 @@ import com.example.demo.httpserver.HttpServer;
 public class Main {
     public static void main(String[] args) {
 		System.out.println("Welcome use this program!");
-		Main main = new Main();
 		HttpServer server = new HttpServer();
-		main.properties();
         server.await();
     }
     

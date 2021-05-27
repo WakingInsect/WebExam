@@ -1,4 +1,4 @@
-package com.example.demo.httpserver;
+package com.example.demo.core;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
