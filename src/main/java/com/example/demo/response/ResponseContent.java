@@ -1,59 +1,78 @@
 package com.example.demo.response;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import com.example.demo.config.GlobalConfig;
+import com.example.demo.log.Log;
 
 public class ResponseContent {
 
-    private static final int BUFFER_SIZE = 1024;
-
     private StringBuilder content = new StringBuilder();
 
-    public String header(String rescource) {
-        byte[] bytes = new byte[BUFFER_SIZE];
-        try (InputStream input = new FileInputStream(new File(GlobalConfig.getInstance().getResource(), rescource))) {
+    public byte[] header(String resource) {
+        try (FileInputStream input = new FileInputStream(GlobalConfig.getInstance().getResource() + "/" + resource)) {
             // 写入响应头
-            setVersion();
-            setType(rescource);
+            setVersion(200);
+            setType(resource);
             setLength(input);
-            int ch = input.read(bytes, 0, BUFFER_SIZE);
-            while (ch != -1) {
-                content.append(new String(bytes));
-                ch = input.read(bytes, 0, BUFFER_SIZE);
-            }
-            return content.toString();
+            return content.toString().getBytes();
         } catch (FileNotFoundException e) {
-            // 如果文件不存在，则输出404
-            e.printStackTrace();
-            String errorMessage = "HTTP/1.1 404  Not Found\r\n" + "Content-Type:text/html\r\n" + "Content-Length:23\r\n"
-                    + "\r\n" + "<h1>File Not Found</h1>";
-            content.append(errorMessage.getBytes());
+            Log.log("访问的文件不存在");
+            setVersion(404);
+            setType("html");
+            
+            return content.toString().getBytes();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return content.toString();
+    
+        return content.toString().getBytes();
+    }
+    public byte[] body(String resource) {
+        try (FileInputStream input = new FileInputStream(GlobalConfig.getInstance().getResource() + "/" + resource)) {
+            return input.readAllBytes();
+        } catch (FileNotFoundException e) {
+            Log.log("访问的文件不存在");
+            return notFound();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private void setVersion() {
-        content.append("HTTP/1.1 200 OK\r\n");
+    private void setVersion(int code) {
+        switch (code) {
+            case 200:
+                content.append("HTTP/1.1 200 OK\n");
+                break;
+            case 404:
+                content.append("HTTP/1.1 404 NOT FOUND\n");
+                break;
+        }
+
     }
 
     private void setType(String resource) {
-        if(resource.endsWith("html"))
-            content.append("Content-Type:text/html\r\n");
-        else if(resource.endsWith("ico"))
-            content.append("Content-Type:image/jpeg\r\n");
+        if (resource.endsWith("html"))
+            content.append("Content-Type: text/html\n");
+        else if (resource.endsWith("ico") || resource.endsWith("jpg"))
+            content.append("Content-Type: image/jpeg\n");
 
     }
 
     private void setLength(InputStream input) throws IOException {
-        content.append("Content-Length:" + input.available()+"\r\n");
+        content.append("Content-Length: " + input.available() + "\n");
+        content.append("\n");
     }
-    
 
+    private byte[] notFound() {
+        String content = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\">"
+                + "<link rel=\"shortcut icon\" href=\"favicon.ico\" /><title>Not Found</title></head>"
+                + "<body><center><h2>File Not Found</h2></center></body></html>";
+        return content.getBytes();
+
+    }
 }

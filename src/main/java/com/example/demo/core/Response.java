@@ -2,6 +2,7 @@ package com.example.demo.core;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import com.example.demo.response.ResponseContent;
 
@@ -16,10 +17,13 @@ public class Response {
         this.output = output;
     }
 
-    public void sendStaticResource(String rescource) throws IOException {
+    public void sendStaticResource(String resource) throws IOException {
         ResponseContent content = new ResponseContent();
-        String resp = content.header(rescource);
-        output.write(resp.getBytes());
+        byte[] header = content.header(resource);
+        byte[] body = content.body(resource);
+        System.out.println(Arrays.toString(body));
+        output.write(header);
+        output.write(body);
     }
 
 }

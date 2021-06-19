@@ -3,6 +3,8 @@ package com.example.demo.core;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.example.demo.log.Log;
+
 
 public class Request {
 
@@ -31,10 +33,14 @@ public class Request {
      * @return
      */
     public String parseUri(String requestString) {
+        Log.log("打印请求体:");
         System.out.println(requestString);
+        Log.log("*********************");
         // 获取访问的文件名
         String[] msg = requestString.split(" ");
         if (msg != null && msg.length != 0) {
+            if(msg.length==1)
+                return "";
             return msg[1].substring(1);
         }
         return null;
