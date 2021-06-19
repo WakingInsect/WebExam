@@ -1,10 +1,8 @@
 package com.example.demo;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
+import com.example.demo.config.GlobalConfig;
 import com.example.demo.core.HttpServer;
+import com.example.demo.log.Log;
 
 
 /**
@@ -12,17 +10,11 @@ import com.example.demo.core.HttpServer;
  */
 public class Main {
     public static void main(String[] args) {
-		System.out.println("Welcome use this program!");
-		HttpServer server = new HttpServer();
+		Log.log("正在启动程序");
+        HttpServer server = new HttpServer();
+        Log.log("正在初始化数据");
+        GlobalConfig.getInstance();
+        // 开始监听连接
         server.await();
     }
-    
-    public void properties() {
-		Properties prop = new Properties();
-		try (InputStream in = this.getClass().getResourceAsStream("/config.properties")) {
-			prop.load(in);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }

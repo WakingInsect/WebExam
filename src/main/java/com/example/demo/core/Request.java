@@ -3,33 +3,26 @@ package com.example.demo.core;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Request {
-    private InputStream input;
-    private String method;  // request 的方法
-    private String uri;     // 请求的资源地址
-    private String version; // http版本号
 
-    public Request(InputStream input) {
-        this.input = input;
-    }
+public class Request {
+
+    private String uri; // 请求的资源地址
 
     /**
      * 对请求进行解析
      */
-    public void parse() {
+    public void parse(InputStream input) {
         StringBuffer request = new StringBuffer(2048);
-        int i;
         byte[] buffer = new byte[2048];
         try {
-            i = input.read(buffer);
+            int i = input.read(buffer);
+            for (int j = 0; j < i; ++j) 
+            request.append((char) buffer[j]);
+        uri = parseUri(request.toString());
         } catch (IOException e) {
             e.printStackTrace();
-            i = -1;
         }
-        for (int j = 0; j < i; ++j) {
-            request.append((char) buffer[j]);
-        }
-        uri = parseUri(request.toString());
+        
     }
     
     /**
@@ -40,13 +33,9 @@ public class Request {
     public String parseUri(String requestString) {
         System.out.println(requestString);
         // 获取访问的文件名
-        int index1, index2;
-        index1 = requestString.indexOf(" ");
-        if (index1 != -1) {
-            index2 = requestString.indexOf(" ", index1 + 1);
-            if (index2 > index1) {
-                return requestString.substring(index1 + 1, index2);
-            }
+        String[] msg = requestString.split(" ");
+        if (msg != null && msg.length != 0) {
+            return msg[1].substring(1);
         }
         return null;
     }

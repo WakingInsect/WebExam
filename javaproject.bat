@@ -11,6 +11,7 @@ set JavaPath=%CurProPath%src\main\java
 set JavaTestPath=%CurProPath%src\test\java
 @REM 设置资源目录
 set JavaResourcePath=%JavaPath%\..\resources
+set StaticResourcePath=%JavaResourcePath%\static
 @REM 设置 class 目录
 set JavaClassPath=%CurProPath%target\classes
 @REM 设置基础包名
@@ -26,6 +27,7 @@ if not exist %JavaClassPath% (
 @REM 把java目录里面的资源文件 copy 到 class 目录中
 if exist %JavaResourcePath% (
     copy %JavaResourcePath%\* %JavaClassPath%
+    copy %StaticResourcePath%\* %JavaClassPath%
 )
 
 @setlocal

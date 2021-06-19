@@ -1,6 +1,7 @@
 ./src/main/java/com/example/demo/Main.java
-./src/main/java/com/example/demo/client/TCPClient.java
-./src/main/java/com/example/demo/server/TCPServer.java
-./src/main/java/com/example/demo/httpserver/HttpServer.java
-./src/main/java/com/example/demo/httpserver/Request.java
-./src/main/java/com/example/demo/httpserver/Response.java
+./src/main/java/com/example/demo/core/HttpServer.java
+./src/main/java/com/example/demo/core/Request.java
+./src/main/java/com/example/demo/core/Response.java
+./src/main/java/com/example/demo/response/ResponseContent.java
+./src/main/java/com/example/demo/config/GlobalConfig.java
+./src/main/java/com/example/demo/log/Log.java

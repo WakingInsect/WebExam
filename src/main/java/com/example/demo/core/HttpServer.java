@@ -7,24 +7,24 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.example.demo.config.GlobalConfig;
+
 public class HttpServer {
 
 	private boolean shutdown = false;
 
-	private int port;
-	private String ip;
-
 	public void await() {
-		try (ServerSocket serverSocket = new ServerSocket(port, 1, InetAddress.getByName(ip))) {
+		GlobalConfig config = GlobalConfig.getInstance();
+		try (ServerSocket serverSocket = new ServerSocket(config.getPort(), 1, InetAddress.getByName(config.getHost()))) {
 			while (!shutdown) {
 				try (Socket socket = serverSocket.accept();
 						InputStream input = socket.getInputStream();
 						OutputStream output = socket.getOutputStream()) {
-					Request request = new Request(input);
-					request.parse();
+					Request request = new Request();
+					request.parse(input);
+					String uri = request.getUri();
 					Response response = new Response(output);
-					response.setRequest(request);
-					response.sendStaticResource();
+					response.sendStaticResource(uri);
 				} catch (Exception e) {
 					e.printStackTrace();
 					continue;
@@ -34,15 +34,5 @@ public class HttpServer {
 			e.printStackTrace();
 			System.exit(0);
 		}
-	}
-
-	public HttpServer(int port, String ip) {
-		this.port = port;
-		this.ip = ip;
-	}
-	
-	public HttpServer() {
-		this.port = 8080;
-		this.ip = "127.0.0.1";
 	}
 }
